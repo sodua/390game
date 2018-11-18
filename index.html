@@ -8,5 +8,47 @@
 
 </head>
 <body>
+  <script src="scripts/virtualjoystick.js"></script>
+  <script>
+  var ship;
+  var joystick	= new VirtualJoystick({
+	container	: document.getElementById('defaultCanvas0'),
+	mouseSupport	: true,
+  });
+  function setup() {
+  createCanvas(900, 720);
+  ship = new Ship();
+  }
+
+  function draw() {
+  background(0);
+	ship.update();
+  ship.show();
+	
+	if (keyIsDown(UP_ARROW)) {
+		ship.up();
+	}
+	if (keyIsDown(DOWN_ARROW)) {
+		ship.down();
+	}
+	if (keyIsDown(RIGHT_ARROW)) {
+		ship.right();
+	}
+	if (keyIsDown(LEFT_ARROW)) {
+		ship.left();
+	}
+	joystick.right() ? ship.right() : '';
+	joystick.up() ? ship.up() : '';
+	joystick.left() ? ship.left() : '';
+	joystick.down() ? ship.down() : '';
+}
+	joystick.addEventListener('touchStart', function(){
+		console.log('down')
+})
+	joystick.addEventListener('touchEnd', function(){
+		console.log('up')
+})
+	
+</script>
 </body>
 </html>
