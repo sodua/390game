@@ -2,6 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <script language="javascript" type="text/javascript" src="scripts/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="scripts/p5.play.js"></script>
   <script language="javascript" src="scripts/p5.dom.js"></script>
   <script language="javascript" type="text/javascript" src="sketch.js"></script>
   <script language="javascript" type="text/javascript" src="ship.js"></script>
@@ -19,14 +20,38 @@
   var level = [];
   function setup() {
   createCanvas(900, 720);
-  ship = new Ship();
+  shipImage = loadImage('assets/ship.png');
+  ship = createSprite(64, height/2);
+  ship.addImage('normal', shipImage);
+  ship.up = function() {
+	ship.position.y = ship.position.y - 10;
+    ship.rotation -= 1;
+  }
+  ship.down = function() {
+        ship.position.y = ship.position.y + 10;
+        ship.rotation += 1;
+  }
+  ship.right = function() {
+    ship.position.x = ship.position.x + 10;
+  }
+  ship.left = function() {
+    ship.position.x = ship.position.x - 10;
+  }
+  ship.update = function() {
+    if (ship.position.y > height) {
+      ship.position.y = height;
+    }
+    if (ship.position.y < 0) {
+      ship.position.y = 0;
+    }
+  }
   level.push(new Level());
+  bulletImage = loadImage('assets/asteroids_bullet.png');
+  bullets = new Group();
   }
 
   function draw() {
   background(0);
-  ship.update();
-  ship.show();
   
   if (frameCount % 10 == 0) {
       level.push(new Level());
@@ -53,6 +78,16 @@
 	joystick.up() ? ship.up() : '';
 	joystick.left() ? ship.left() : '';
 	joystick.down() ? ship.down() : '';
+
+ if (keyWentDown('SPACE')) {
+      var bullet = createSprite(ship.position.x, ship.position.y);
+      bullet.addImage(bulletImage);
+      bullet.setSpeed(30, ship.rotation);
+      bullet.life = 30;
+      bullets.add(bullet);
+  }
+
+  drawSprites();
 }
 	joystick.addEventListener('touchStart', function(){
 		console.log('down')
@@ -60,7 +95,7 @@
 	joystick.addEventListener('touchEnd', function(){
 		console.log('up')
 })
-	
+ 
 </script>
 </body>
 </html>
