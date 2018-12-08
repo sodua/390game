@@ -4,8 +4,6 @@
   <script language="javascript" type="text/javascript" src="scripts/p5.js"></script>
   <script language="javascript" type="text/javascript" src="scripts/p5.play.js"></script>
   <script language="javascript" src="scripts/p5.dom.js"></script>
-  <script language="javascript" type="text/javascript" src="sketch.js"></script>
-  <script language="javascript" type="text/javascript" src="ship.js"></script>
   <script language="javascript" type="text/javascript" src="level.js"></script>
 
 </head>
@@ -20,9 +18,9 @@
   });
   var level = [];
   function setup() {
-  createCanvas(900, 720);
+  createCanvas(1100, 600);
   
-  shipImage = loadImage('assets/ship.png');
+  shipImage = loadImage('assets/Ship.png');
   ship = createSprite(64, height/2);
   ship.addImage("normal", shipImage);
   ship.up = function() {
@@ -33,12 +31,12 @@
   }
   ship.down = function() {
         ship.position.y = ship.position.y + 10;
-        if (ship.position.y < 700) { 
+        if (ship.position.y < 600) { 
 		    ship.rotation += 1;
 			}
   }
   ship.right = function() {
-    if(ship.position.x <= 450) {
+    if(ship.position.x <= width/2) {
 	    ship.position.x = ship.position.x + 10;
 		}
   }
@@ -57,7 +55,7 @@
   }
   level.push(new Level());
   
-  bulletImage = loadImage('assets/fireball-small.png');
+  bulletImage = loadImage('assets/fb_o.png');
   bullets = new Group();
   }
   function draw() {
