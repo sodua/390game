@@ -10,8 +10,6 @@
 <body>
   <script src="scripts/virtualjoystick.js"></script>
   <script>
-  var shipImage = new Image();
-  shipImage.src = "ship.png";
   var joystick	= new VirtualJoystick({
 	container	: document.getElementById('defaultCanvas0'),
 	mouseSupport	: true,
@@ -31,7 +29,11 @@
   }
   ship.down = function() {
         ship.position.y = ship.position.y + 10;
+<<<<<<< HEAD
         if (ship.position.y < 600) { 
+=======
+        if (ship.position.y < 720) { 
+>>>>>>> 101cfc41b67fc6606cb913a676a6865fc9feea79
 		    ship.rotation += 1;
 			}
   }
