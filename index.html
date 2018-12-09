@@ -15,11 +15,18 @@ mouseSupport : true,
 
 function setup() {
     createCanvas(1100, 600);
+    terrainTop = loadImage('assets/terrain_top.png');
+    terrainBottom = loadImage('assets/terrain_bottom.png');
     turretImage = loadImage('assets/turret.png');
     turrets = new Group();
-    shipImage = loadImage('assets/Ship.png');
+    shipImage = loadImage('assets/ship-side.png');
+    shipUpImage = loadImage('assets/ship-side-right_under.png');
+    shipDownImage = loadImage('assets/ship-side-left.png');
     ship = createSprite(64, height/2);
     ship.addImage("normal", shipImage);
+    ship.addImage("up", shipUpImage);
+    ship.addImage("down", shipDownImage);
+    ship.score = 10;
     bulletImage = loadImage('assets/fb_o.png');
     bullets = new Group();
     fbImage = loadImage('assets/fireball_small.png');
@@ -62,33 +69,37 @@ function draw() {
     camera.position.x = ship.position.x + width/4;
     
     ship.up = function() {
+        ship.changeAnimation("up");
         ship.position.y = ship.position.y - 10;
         if (ship.position.y > 0) {
             ship.rotation -= 1;
         }
     }
     ship.down = function() {
+        ship.changeAnimation("down");
         ship.position.y = ship.position.y + 10;
         if (ship.position.y < 600) { 
             ship.rotation += 1;
         }
     }
     ship.right = function() {
+            ship.changeAnimation("normal");
             ship.position.x = ship.position.x + 10;
     }
     ship.left = function() {
+            ship.changeAnimation("normal");
         if (ship.position.x >= 0) {
             ship.position.x = ship.position.x - 10;
 	    }
     }
  	
-    if (keyIsDown(UP_ARROW))
+    if (keyIsDown(UP_ARROW) || keyIsDown(87))
 		ship.up();
-	if (keyIsDown(DOWN_ARROW))
+	if (keyIsDown(DOWN_ARROW) || keyIsDown(83))
 		ship.down();
-	if (keyIsDown(RIGHT_ARROW))
+	if (keyIsDown(RIGHT_ARROW) || keyIsDown(68))
 		ship.right();
-	if (keyIsDown(LEFT_ARROW))
+	if (keyIsDown(LEFT_ARROW) || keyIsDown(65))
 		ship.left();
 
 	joystick.right() ? ship.right() : '';
@@ -114,6 +125,22 @@ function draw() {
         bullets.add(bullet);
     }
 
+    bullets.collide(turrets, explosion);
+    function explosion(spriteA, spriteB) {
+        spriteA.remove(); /* remove bullet that ship fired */
+        spriteB.remove(); /* remove turret that was hit*/
+    }
+
+    fireballs.collide(ship, shipHit);
+    function shipHit(spriteA, spriteB) {
+        spriteA.remove() /* remove fireball that hit ship */ 
+        spriteB.score--;
+        console.log(spriteB.score);
+    }
+    camera.off();
+    image(terrainTop, 0, 0);
+    image(terrainBottom, 0, 565);
+    camera.on();
     drawSprites();
 }
 joystick.addEventListener('touchStart', function(){
