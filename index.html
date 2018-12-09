@@ -29,29 +29,32 @@ function setup() {
 
 function draw() {
     background(0);
-    var turretCount = 0; 
+    if (frameCount%60 == 0) {
+        for (var i = 0; i < turrets.length; i++) {
+            var rnd = random(5, 30)
+            var t = turrets[i];
+            var fb = createSprite(t.position.x, t.position.y);
+            fb.addImage(fbImage);
+            fb.attractionPoint(rnd, ship.position.x, ship.position.y);
+            fireballs.add(fb);
+        }
+    }
     if (frameCount%60 == 0) {
         var turretSpacing = random(700, 900);
         var turret = createSprite(ship.position.x + turretSpacing, 35, 75, 75);
         turret.addImage(turretImage);
         turrets.add(turret);
-        var fireball=createSprite(turret.position.x, turret.position.y);
-        fireball.addImage(fbImage);
-        fireball.attractionPoint(30, ship.position.x, ship.position.y);
-        fireballs.add(fireball);
 
         if (turretSpacing < 800) {
             turret = createSprite(ship.position.x + turretSpacing, 565, 75, 75);
             turret.mirrorY(-1);
             turret.addImage(turretImage);
             turrets.add(turret);
-            var fireball=createSprite(turret.position.x, turret.position.y);
-            fireball.addImage(fbImage);
-            fireball.attractionPoint(30, ship.position.x, ship.position.y);
-            fireballs.add(fireball);
         }
     }
-
+    for (var i = 0; i < fireballs.length; i++)
+        if (fireballs[i].position.y > height || fireballs[i].position.y < 0)
+            fireballs[i].remove();
     for (var i = 0; i < turrets.length; i++)
         if (turrets[i].position.x < ship.position.x - width/2)
             turrets[i].remove();
